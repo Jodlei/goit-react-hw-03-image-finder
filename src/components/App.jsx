@@ -57,7 +57,7 @@ export class App extends Component {
       toast('По вашому запиту не знайдено жодного зображення');
       return;
     }
-    console.log(totalHits);
+
     if (imagesLength + 12 >= totalHits) {
       this.setState(state => ({
         images: [...state.images, ...hits],
