@@ -32,20 +32,11 @@ export class App extends Component {
     }
   }
 
-  getDataFromApi = async (query, page) => {
-    return await axios({
-      method: 'get',
-      url: 'https://pixabay.com/api/',
-      params: {
-        key: '30808898-c0dc862c32689843f849354cf',
-        q: query,
-        image_type: 'photo',
-        orientation: 'horizontal',
-        safesearch: 'true',
-        per_page: 12,
-        page: page,
-      },
-    });
+  getDataFromApi = (query, page) => {
+    console.log(1);
+    return axios.get(
+      `https://pixabay.com/api/?q=${query}&page=${page}&key=30808898-c0dc862c32689843f849354cf&image_type=photo&orientation=horizontal&per_page=12`
+    );
   };
 
   updateState = resp => {
