@@ -1,6 +1,7 @@
+import PropTypes from 'prop-types';
+
 import { Component } from 'react';
 import { createPortal } from 'react-dom';
-
 import { Overlay, ModalContainer } from './Modal.styled';
 
 const modalRoot = document.querySelector('#image-modal-root');
@@ -14,7 +15,7 @@ export class Modal extends Component {
     window.removeEventListener('keydown', this.closeModal);
   }
 
-  OnBackdropClick = e => {
+  onBackdropClick = e => {
     if (e.target === e.currentTarget) {
       this.props.toggleModal();
     }
@@ -35,3 +36,7 @@ export class Modal extends Component {
     );
   }
 }
+
+Modal.propTypes = {
+  toggleModal: PropTypes.func.isRequired,
+};

@@ -1,3 +1,5 @@
+import PropTypes from 'prop-types';
+
 import { FaSearch } from 'react-icons/fa';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -29,6 +31,7 @@ export class SearchBar extends Component {
       toast('Введіть назву картинки');
       return;
     }
+
     this.props.onSubmit(this.state.imageName);
     this.setState({ imageName: '' });
   };
@@ -57,3 +60,7 @@ export class SearchBar extends Component {
     );
   }
 }
+
+SearchBar.propTypes = {
+  onSubmit: PropTypes.func.isRequired,
+};

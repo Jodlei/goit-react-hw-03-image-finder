@@ -1,8 +1,9 @@
 import { Component } from 'react';
 import React from 'react';
-import axios from 'axios';
+
 import { ToastContainer } from 'react-toastify';
 import { toast } from 'react-toastify';
+import { getDataFromApi } from './services/API';
 
 import { Container } from './Container/Container.styled';
 import { SearchBar } from './SearchBar/SearchBar';
@@ -26,22 +27,18 @@ export class App extends Component {
 
     if (query !== prevState.query || page !== prevState.page) {
       this.setState({ status: 'loading' });
-      this.getDataFromApi(query, page).then(response =>
-        this.updateState(response)
-      );
+      getDataFromApi(query, page).then(response => this.updateState(response));
     }
   }
-
-  getDataFromApi = (query, page) => {
-    console.log(1);
-    return axios.get(
-      `https://pixabay.com/api/?q=${query}&page=${page}&key=30808898-c0dc862c32689843f849354cf&image_type=photo&orientation=horizontal&per_page=12`
-    );
-  };
 
   updateState = resp => {
     const imagesLength = this.state.images.length;
     const { totalHits, hits } = resp.data;
+    const requiredData = hits.map(
+      ({ id, webformatURL, largeImageURL, tags }) => {
+        return { id, webformatURL, largeImageURL, tags };
+      }
+    );
 
     if (hits.length === 0) {
       this.setState({ status: 'idle' });
@@ -50,16 +47,16 @@ export class App extends Component {
     }
 
     if (imagesLength + 12 >= totalHits) {
-      this.setState(state => ({
-        images: [...state.images, ...hits],
+      this.setState(prevState => ({
+        images: [...prevState.images, ...requiredData],
         status: 'idle',
       }));
       toast('Більше немає зображень по вашому запиту');
       return;
     }
 
-    this.setState(state => ({
-      images: [...state.images, ...hits],
+    this.setState(prevState => ({
+      images: [...prevState.images, ...requiredData],
       status: 'resolved',
     }));
   };
@@ -103,7 +100,7 @@ export class App extends Component {
 
         {this.state.showModal && (
           <Modal toggleModal={this.toggleModal}>
-            <img loading="lazy" src={largeImageURL} alt={tags} />
+            <img src={largeImageURL} alt={tags} />
           </Modal>
         )}
 
